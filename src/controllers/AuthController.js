@@ -46,12 +46,14 @@ const register = async (req, res) => {
     // insert database
     const user = await insertUser(newUser);
 
-    const dirFaceRecognition = path.resolve(
-      __dirname,
-      `../../../crowd_fatigue_detection_web/face-recognition`
-    );
+    // const dirFaceRecognition =
+    //   // process.env.FACE_RECOGNITION_PATH ||
+    //   path.resolve(
+    //     __dirname,
+    //     `../../../crowd_fatigue_detection_web/face-recognition`
+    //   );
 
-    const dirDatasets = path.join(dirFaceRecognition, "datasets");
+    const dirDatasets = process.env.DATASET_DIR;
 
     const userFolder = path.join(dirDatasets, "new_persons", `${user.id}`);
 
@@ -73,7 +75,7 @@ const register = async (req, res) => {
     deleteDirectory(`${dirDatasets}/face_features/feature.npz`);
 
     // Panggil script Python untuk training
-    const pythonScript = `${dirFaceRecognition}/add_persons.py`;
+    const pythonScript = `${process.env.ML_DIR}/face-recognition/add_persons.py`;
     // const pythonScript1 = "../crowd_control_web/face-recognition/app.py";
 
     execFile("python", [pythonScript], (error, stdout, stderr) => {

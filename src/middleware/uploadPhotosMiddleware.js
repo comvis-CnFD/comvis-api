@@ -1,15 +1,12 @@
 const multer = require("multer");
 const path = require("path");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(
-      null,
-      path.resolve(
-        __dirname,
-        "../../../crowd_fatigue_detection_web/face-recognition/datasets/new_persons"
-      )
-    );
+    cb(null, path.resolve(process.env.DATASET_DIR, "new_persons"));
   },
   filename: (req, file, cb) => {
     cb(null, `${file.originalname}`);

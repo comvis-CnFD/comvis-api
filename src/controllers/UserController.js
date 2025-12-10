@@ -58,15 +58,12 @@ const destroy = async (req, res) => {
     const user = await deleteUserById(id);
     if (!user) throw new Error("Invalid delete user");
 
-    deleteDirectory(
-      `D:/magang/comvis/crowd_control_web/face-recognition/datasets/data/${id}`
-    );
-    deleteDirectory(
-      `D:/magang/comvis/crowd_control_web/face-recognition/datasets/backup/${id}`
-    );
+    deleteDirectory(`${process.env.DATASET_DIR}/data/${id}`);
+    deleteDirectory(`${process.env.DATASET_DIR}/backup/${id}`);
 
     // Panggil script Python untuk training
-    const pythonScript = "../crowd_control_web/face-recognition/del_persons.py";
+    // const pythonScript = "../crowd_fatigue_detection_web/face-recognition/del_persons.py";
+    const pythonScript = `${process.env.ML_DIR}/face-recognition/del_persons.py`;
 
     execFile("python", [pythonScript], (error, stdout, stderr) => {
       if (error) {
